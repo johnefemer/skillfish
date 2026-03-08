@@ -1,6 +1,6 @@
 # AI Coach Skills
 
-Expert AI skills for coding agents — published via [Skillfish](https://skill.fish).
+**169 expert AI skills** for coding agents — published via [Skillfish](https://skill.fish).
 
 **Website:** [coach.omazy.ai](https://coach.omazy.ai)
 
@@ -11,22 +11,27 @@ Expert AI skills for coding agents — published via [Skillfish](https://skill.f
 skillfish add johnefemer/skillfish --all
 
 # Install a specific skill
-skillfish add johnefemer/skillfish/skills/code-review-coach
-skillfish add johnefemer/skillfish/skills/github-project-manager
+skillfish add johnefemer/skillfish/skills/<skill-name>
 ```
 
-## Available Skills
+## Skill Domains
 
-| Skill | Description |
-|-------|-------------|
-| [code-review-coach](skills/code-review-coach/) | Structured code review with coaching feedback |
-| [github-project-manager](skills/github-project-manager/) | Invisible AI project manager for GitHub Issues & Projects v2 |
+| Domain | Examples |
+|--------|---------|
+| Engineering | senior-architect, senior-frontend, senior-backend, playwright-pro, tdd-guide |
+| Engineering Advanced | agent-designer, rag-architect, ci-cd-pipeline-builder, mcp-server-builder |
+| C-Level Advisory | ceo-advisor, cfo-advisor, cto-advisor, executive-mentor, board-meeting |
+| Marketing | content-production, seo-audit, page-cro, email-sequence, paid-ads |
+| Product | product-manager-toolkit, ux-researcher-designer, saas-scaffolder |
+| Project Management | github-project-manager, scrum-master, jira-expert, confluence-expert |
+| Regulatory & Compliance | iso-13485, mdr-745, fda, gdpr, iso-27001, risk-management |
+| Business & Finance | customer-success-manager, sales-engineer, financial-analyst |
 
 ## How It Works
 
-Each skill is a `SKILL.md` file with structured prompts that turn your AI coding agent into a domain expert. Skills work with 32+ agents including Claude Code, Cursor, GitHub Copilot, and more.
+Each skill is a `SKILL.md` file with structured prompts that turn your AI coding agent into a domain expert. Skills work with Claude Code, Cursor, and any agent that supports Skillfish.
 
-Learn more at [coach.omazy.ai](https://coach.omazy.ai).
+Browse all skills at [coach.omazy.ai](https://coach.omazy.ai).
 
 ## Author
 
