@@ -1,6 +1,6 @@
 # AI Coach Skills
 
-**169 expert AI skills** for coding agents — published via [Skillfish](https://skill.fish).
+**170 expert AI skills** for coding agents — published via [Skillfish](https://skill.fish).
 
 **Website:** [coach.omazy.ai](https://coach.omazy.ai)
 

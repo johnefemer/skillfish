@@ -1,0 +1,13 @@
+#!/bin/sh
+# Strip ALL Co-Authored-By lines (Claude Code, Copilot, etc.)
+sed -i '' '/^[[:space:]]*[Cc]o-[Aa]uthored-[Bb]y:/d' "$1"
+# Strip Cursor attribution lines
+sed -i '' '/^[[:space:]]*[Mm]ade-with:[[:space:]]*[Cc]ursor/d' "$1"
+sed -i '' '/^[[:space:]]*[Gg]enerated by [Cc]ursor/d' "$1"
+sed -i '' '/^[[:space:]]*[Cc]reated with [Cc]ursor/d' "$1"
+sed -i '' '/[Cc]ursor AI/d' "$1"
+# Strip any generic AI tool attribution
+sed -i '' '/^[[:space:]]*[Gg]enerated by.*AI/d' "$1"
+sed -i '' '/^[[:space:]]*[Cc]reated with.*AI/d' "$1"
+# Remove trailing blank lines left behind
+sed -i '' -e :a -e '/^\n*$/{$d;N;ba' -e '}' "$1"
