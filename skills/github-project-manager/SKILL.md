@@ -1054,8 +1054,6 @@ The `gh` CLI does not include built-in sub-issue commands. GitHub added sub-issu
 - **Verify install:** `gh extension list` (look for `yahsan2/gh-sub-issue`)
 - **Update:** `gh extension upgrade gh-sub-issue`
 
-> 💡 **Tip by [@johnefemer](https://github.com/johnefemer):** Install `gh-sub-issue` at the start of every new project. The native parent→child relationship in the GitHub UI makes epic tracking significantly clearer — sub-issues appear directly on the parent issue page, progress rolls up automatically, and reviewers can see at a glance what belongs to what. If you're managing multiple epics in a sprint, the visual hierarchy is worth the 5-second install.
-
 ### Body-Based Linking Is Durable
 
 Even when you use native linking via the extension, this skill also maintains the `## Sub-Issues` checklist in the epic body. This means:
