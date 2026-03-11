@@ -31,6 +31,7 @@ description: Invisible AI project manager for GitHub. Auto-discovers projects, c
 - Working directory is a git repository with a GitHub remote
 - Write access to the target repository and GitHub Project
 - For project board operations, ensure project scope: `gh auth refresh -s project`
+- **Optional:** `gh-sub-issue` extension for native sub-issue linking (see [Sub-Issue Management](#sub-issue-management))
 
 ## Workflow
 
@@ -85,7 +86,27 @@ Create the full label set using `gh label create --force` (idempotent — safe t
 
 See [Label Taxonomy & Bootstrap](#label-taxonomy--bootstrap) section for the complete set.
 
-#### Step 7: Write Configuration File
+#### Step 7: Detect Sub-Issue Extension
+
+Check whether the `gh-sub-issue` extension is installed:
+
+```bash
+gh extension list | grep -q "yahsan2/gh-sub-issue" && echo "available" || echo "missing"
+```
+
+If the extension is **missing**, ask the user:
+
+> The `gh-sub-issue` extension is not installed. It enables native GitHub sub-issue linking (parent → child relationships visible in the GitHub UI). Install it now? (recommended — takes 5 seconds)
+
+- **Yes → install:**
+  ```bash
+  gh extension install yahsan2/gh-sub-issue
+  ```
+- **No → continue with body-based fallback:** Parent/child links are embedded in issue bodies instead. All features still work.
+
+Store the result so this check does not repeat on every operation.
+
+#### Step 8: Write Configuration File
 
 Save everything to `.github/project-config.json`. This file is committable so the whole team shares the same configuration.
 
@@ -131,6 +152,12 @@ Save everything to `.github/project-config.json`. This file is committable so th
     "techStack": "{auto-detected}",
     "testCommand": "{auto-detected}",
     "lintCommand": "{auto-detected}"
+  },
+  "extensions": {
+    "subIssue": {
+      "available": true,
+      "detectedAt": "{ISO-date}"
+    }
   }
 }
 ```
@@ -202,13 +229,57 @@ Every issue follows this process:
 
 #### Linking Sub-Issues to Epics
 
-After creating sub-issues for an epic:
+Always read `extensions.subIssue.available` from `.github/project-config.json` before linking. Use the appropriate mode:
+
+##### Mode A — Native (gh-sub-issue extension available)
 
 ```bash
-gh issue edit {parent_number} --repo {owner}/{repo} --add-sub-issue {sub_issue_number}
+# Link an existing issue as a sub-issue of the epic
+gh sub-issue add {parent_number} {sub_issue_number}
+
+# Create a brand-new sub-issue directly under the epic
+gh sub-issue create --parent {parent_number} --title "[Task] Sub-issue title"
+
+# List all sub-issues of an epic
+gh sub-issue list {parent_number}
 ```
 
-Then update the epic body to include actual sub-issue links.
+The relationship is stored natively in GitHub and appears in the UI. Still update the epic's `## Sub-Issues` checklist in the body — it serves as a human-readable overview even when native links exist.
+
+##### Mode B — Body-based fallback (extension not installed)
+
+When the extension is unavailable, encode the relationship in issue bodies:
+
+**In the child issue body** — prepend a Parent line:
+```markdown
+**Parent:** #{parent_number} — {epic_title}
+```
+
+**In the epic body** — keep the `## Sub-Issues` checklist current:
+```markdown
+## Sub-Issues
+
+- [ ] #{child_1} — {title}
+- [ ] #{child_2} — {title}
+```
+
+Update it via:
+```bash
+# Fetch current body, append new sub-issue line, push update
+CURRENT=$(gh issue view {parent_number} --repo {owner}/{repo} --json body -q '.body')
+UPDATED="${CURRENT}
+- [ ] #{child_number} — {child_title}"
+gh issue edit {parent_number} --repo {owner}/{repo} --body "$UPDATED"
+```
+
+##### Discovering Sub-Issues (Mode B)
+
+When the extension is not available, find all children of an epic by searching issue bodies:
+
+```bash
+gh issue list --repo {owner}/{repo} --state open --json number,title,body \
+  | jq '.[] | select(.body | test("\\*\\*Parent:\\*\\* #{parent_number}"))'
+```
 
 #### Closing Issues
 
@@ -777,12 +848,15 @@ When asked to triage the backlog:
 
 When asked about epic progress:
 
-1. List all sub-issues with status, assignee, and size
-2. Calculate: total points, completed points, remaining points
-3. Completion percentage with progress bar
-4. Items at risk: stuck in `In Progress` > 2 days, no assignee, blocked
-5. Projected completion based on current velocity
-6. Recommend: re-prioritize, split large tasks, unblock dependencies
+1. **Discover sub-issues** using the active mode:
+   - Native: `gh sub-issue list {parent_number}`
+   - Fallback: `gh issue list` filtered by `**Parent:** #{parent_number}` in body
+2. List all sub-issues with status, assignee, and size
+3. Calculate: total points, completed points, remaining points
+4. Completion percentage with progress bar
+5. Items at risk: stuck in `In Progress` > 2 days, no assignee, blocked
+6. Projected completion based on current velocity
+7. Recommend: re-prioritize, split large tasks, unblock dependencies
 
 ### Cross-Repo Coordination
 
@@ -839,6 +913,9 @@ Compare estimates vs actuals over time. If M-sized tasks consistently take 2 day
 
 ```
 📋 Epic: [Epic] User Authentication Overhaul (#140)
+   🔗 Sub-issue linking: native (gh-sub-issue extension active)
+   — or —
+   📝 Sub-issue linking: body-based (gh-sub-issue not installed — run: gh extension install yahsan2/gh-sub-issue)
 
   Sub-Issues Created:
   ├── [Task] Migrate session store to Redis (#141) — S (2 pts)
@@ -899,4 +976,104 @@ Compare estimates vs actuals over time. If M-sized tasks consistently take 2 day
 
 **Input:** "Set up project management for this repo"
 
-**Output:** Runs full discovery, creates 40+ labels, saves config, reports: "Project board 'Engineering Board' configured. 42 labels created. Config saved to .github/project-config.json."
+**Output:** Runs full discovery, detects extension availability, creates 40+ labels, saves config, reports: "Project board 'Engineering Board' configured. 42 labels created. Sub-issue linking: native. Config saved to .github/project-config.json."
+
+### Example 5: Create an Epic with Sub-Issues
+
+**Input:** "Create an epic for the payment integration and break it into tasks"
+
+**Output:** Creates `[Epic] Payment Integration (#88)`, then creates 4 sub-tasks. If extension is available, links them natively with `gh sub-issue add`. If not, adds `**Parent:** #88` to each child and updates the epic's `## Sub-Issues` checklist.
+
+### Example 6: Check Sub-Issues
+
+**Input:** "List all sub-issues for epic #88"
+
+**Output:** Runs `gh sub-issue list 88` (native) or searches issue bodies for `**Parent:** #88` (fallback), then renders the health summary.
+
+---
+
+## Sub-Issue Management
+
+> Native sub-issue relationships (parent → child visible in the GitHub UI) require the `gh-sub-issue` extension by [@yahsan2](https://github.com/yahsan2). This skill works fully without it — relationships are tracked in issue bodies as a fallback.
+
+### Install the Extension
+
+```bash
+gh extension install yahsan2/gh-sub-issue
+```
+
+### Extension Commands
+
+```bash
+# Link an existing issue as a sub-issue of a parent
+gh sub-issue add <parent-issue-number> <sub-issue-number>
+
+# Create a new sub-issue directly under a parent
+gh sub-issue create --parent <parent-issue-number> --title "Sub-issue title"
+
+# List all sub-issues of a parent issue
+gh sub-issue list <parent-issue-number>
+```
+
+You can use issue numbers or full URLs interchangeably:
+```bash
+gh sub-issue add 42 71
+gh sub-issue add https://github.com/org/repo/issues/42 https://github.com/org/repo/issues/71
+```
+
+### Capability Detection
+
+The skill checks for the extension on first run and stores the result in `.github/project-config.json` under `extensions.subIssue.available`. To re-check (e.g., after installing the extension mid-project), delete the key from config and re-run any operation — detection runs automatically.
+
+### Fallback Behavior (No Extension)
+
+When `extensions.subIssue.available` is `false`:
+
+| Operation | Behavior |
+| --- | --- |
+| Link child to parent | Prepend `**Parent:** #N — {title}` to child issue body |
+| Create child under parent | Create issue normally, then add Parent line to body |
+| List sub-issues of epic | `gh issue list` filtered by `**Parent:** #N` in body |
+| Epic health check | Body-search discovery, same health metrics |
+
+The body-based approach is fully functional — epic health reports, sprint planning, and the PRD pipeline all work. The only difference is the relationship is not visible as a native GitHub UI link.
+
+---
+
+## Good to Know
+
+### Sub-Issues Are Not Native to the GitHub CLI
+
+The `gh` CLI does not include built-in sub-issue commands. GitHub added sub-issue support to the UI in 2024, but `gh` CLI commands like `gh issue edit --add-sub-issue` are **not available** in the current stable release. Native sub-issue linking from the command line requires the community extension.
+
+### The gh-sub-issue Extension
+
+- **Repo:** [https://github.com/yahsan2/gh-sub-issue](https://github.com/yahsan2/gh-sub-issue)
+- **Author:** [@yahsan2](https://github.com/yahsan2) — community-maintained GitHub CLI extension
+- **Install:** `gh extension install yahsan2/gh-sub-issue`
+- **Verify install:** `gh extension list` (look for `yahsan2/gh-sub-issue`)
+- **Update:** `gh extension upgrade gh-sub-issue`
+
+> 💡 **Tip by [@johnefemer](https://github.com/johnefemer):** Install `gh-sub-issue` at the start of every new project. The native parent→child relationship in the GitHub UI makes epic tracking significantly clearer — sub-issues appear directly on the parent issue page, progress rolls up automatically, and reviewers can see at a glance what belongs to what. If you're managing multiple epics in a sprint, the visual hierarchy is worth the 5-second install.
+
+### Body-Based Linking Is Durable
+
+Even when you use native linking via the extension, this skill also maintains the `## Sub-Issues` checklist in the epic body. This means:
+- The relationship is visible even in tools that don't render native sub-issue UI
+- You get a human-readable task list right in the issue description
+- If the extension is ever unavailable, the fallback works immediately with no data loss
+
+### Project Config Caches Extension State
+
+To avoid running `gh extension list` on every operation (slow over many issues), the detection result is stored in `.github/project-config.json`. This file is safe to commit — team members who install the extension later just need to update the `extensions.subIssue.available` field to `true`, or delete it to trigger auto-detection.
+
+### Migrating from Body-Based to Native Linking
+
+If you started a project without the extension and later install it, you can retroactively link existing issues:
+
+```bash
+# For each sub-issue listed in the epic body, run:
+gh sub-issue add {parent_number} {child_number}
+```
+
+The body-based `**Parent:**` lines and epic checklists remain as-is — they coexist harmlessly with native links and provide redundant visibility.
