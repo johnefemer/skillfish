@@ -1,0 +1,23 @@
+#!/bin/sh
+# post-commit: If the commit author is an AI tool, amend it to use
+# the configured git user.name / user.email instead.
+#
+# This catches tools like Cursor Agent that set themselves as the
+# git author (--author="cursoragent <...>").
+
+AUTHOR_NAME=$(git log -1 --format='%an')
+AUTHOR_EMAIL=$(git log -1 --format='%ae')
+
+# Pattern match against known AI tool author names
+case "$AUTHOR_NAME" in
+  *[Cc]ursor[Aa]gent*|*[Cc]ursor[- ][Aa]gent*|*[Cc]laude*|*[Cc]opilot*|*[Gg]ithub[- ][Cc]opilot*|*[Oo]pen[Aa][Ii]*)
+    # Get the real user from git config
+    REAL_NAME=$(git config user.name)
+    REAL_EMAIL=$(git config user.email)
+
+    if [ -n "$REAL_NAME" ] && [ -n "$REAL_EMAIL" ]; then
+      # Amend the commit with the correct author (keeps the message intact)
+      git commit --amend --no-edit --author="$REAL_NAME <$REAL_EMAIL>" --allow-empty >/dev/null 2>&1
+    fi
+    ;;
+esac
