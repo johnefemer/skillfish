@@ -1,11 +1,13 @@
 #!/bin/sh
-# Strip ALL Co-Authored-By lines (Claude Code, Copilot, etc.)
+# Strip ALL Co-Authored-By lines (Claude Code, Copilot, Cursor Agent, etc.)
 sed -i '' '/^[[:space:]]*[Cc]o-[Aa]uthored-[Bb]y:/d' "$1"
-# Strip Cursor attribution lines
+# Strip Cursor / Cursor Agent attribution lines
 sed -i '' '/^[[:space:]]*[Mm]ade-with:[[:space:]]*[Cc]ursor/d' "$1"
 sed -i '' '/^[[:space:]]*[Gg]enerated by [Cc]ursor/d' "$1"
 sed -i '' '/^[[:space:]]*[Cc]reated with [Cc]ursor/d' "$1"
 sed -i '' '/[Cc]ursor AI/d' "$1"
+sed -i '' '/[Cc]ursor[- ][Aa]gent/d' "$1"
+sed -i '' '/^[[:space:]]*[Aa]uthor.*[Cc]ursor/d' "$1"
 # Strip any generic AI tool attribution
 sed -i '' '/^[[:space:]]*[Gg]enerated by.*AI/d' "$1"
 sed -i '' '/^[[:space:]]*[Cc]reated with.*AI/d' "$1"
