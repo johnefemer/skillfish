@@ -1,276 +1,285 @@
-# Content Patterns for AI Citability
+# AEO and GEO Content Patterns
 
-Ready-to-use block templates for each content pattern that AI search engines reliably extract and cite. Copy, adapt, and embed in your pages.
-
----
-
-## Why Patterns Matter
-
-AI systems don't read pages the way humans do. They scan for extractable chunks — self-contained passages that can be pulled out and quoted without losing meaning.
-
-The patterns below are structured to be self-contained by design. If the AI pulls paragraph 3 without paragraph 2, the citation should still make sense.
+Reusable content block patterns optimized for answer engines and AI citation.
 
 ---
 
-## Pattern 1: Definition Block
+## Contents
+- Answer Engine Optimization (AEO) Patterns (Definition Block, Step-by-Step Block, Comparison Table Block, Pros and Cons Block, FAQ Block, Listicle Block)
+- Generative Engine Optimization (GEO) Patterns (Statistic Citation Block, Expert Quote Block, Authoritative Claim Block, Self-Contained Answer Block, Evidence Sandwich Block)
+- Domain-Specific GEO Tactics (Technology Content, Health/Medical Content, Financial Content, Legal Content, Business/Marketing Content)
+- Voice Search Optimization (Question Formats for Voice, Voice-Optimized Answer Structure)
 
-**Used for:** "What is X" queries — the most common AI Overview trigger.
+## Answer Engine Optimization (AEO) Patterns
 
-**Requirements:**
-- First sentence: direct definition
-- Second sentence: why it matters or how it works
-- Third sentence (optional): example or context
-- Placed in first 300 words of the page
+These patterns help content appear in featured snippets, AI Overviews, voice search results, and answer boxes.
 
-**Template:**
+### Definition Block
+
+Use for "What is [X]?" queries.
+
 ```markdown
-**[Term]** is [precise definition — what it is, what it does, who uses it]. 
-[One sentence on why it matters or what problem it solves]. 
-[Optional: one sentence example — "For example, a SaaS company might use X to..."].
+## What is [Term]?
+
+[Term] is [concise 1-sentence definition]. [Expanded 1-2 sentence explanation with key characteristics]. [Brief context on why it matters or how it's used].
 ```
 
 **Example:**
 ```markdown
-**Churn rate** is the percentage of customers who cancel or stop using a service within a given period, typically measured monthly or annually. It directly impacts recurring revenue — a 5% monthly churn means losing over half your customer base each year. For subscription SaaS, a healthy monthly churn rate is typically below 2%.
+## What is Answer Engine Optimization?
+
+Answer Engine Optimization (AEO) is the practice of structuring content so AI-powered systems can easily extract and present it as direct answers to user queries. Unlike traditional SEO that focuses on ranking in search results, AEO optimizes for featured snippets, AI Overviews, and voice assistant responses. This approach has become essential as over 60% of Google searches now end without a click.
 ```
 
-**Tips:**
-- Bold the term on its first use
-- Don't start with "In the world of..." or "When it comes to..."
-- The definition should work even if the reader knows nothing about the topic
+### Step-by-Step Block
 
----
+Use for "How to [X]" queries. Optimal for list snippets.
 
-## Pattern 2: Numbered Steps (How-To)
-
-**Used for:** "How to X" and "How do I X" queries.
-
-**Requirements:**
-- Numbered list (not bulleted)
-- Each step starts with an action verb
-- Each step is self-contained (can be cited alone)
-- 5-10 steps maximum
-- Pair with HowTo schema markup
-
-**Template:**
 ```markdown
-## How to [Task]
+## How to [Action/Goal]
 
-1. **[Verb phrase]** — [1-2 sentence explanation of this specific step]
-2. **[Verb phrase]** — [1-2 sentence explanation]
-3. **[Verb phrase]** — [1-2 sentence explanation]
-4. **[Verb phrase]** — [1-2 sentence explanation]
-5. **[Verb phrase]** — [1-2 sentence explanation]
+[1-sentence overview of the process]
+
+1. **[Step Name]**: [Clear action description in 1-2 sentences]
+2. **[Step Name]**: [Clear action description in 1-2 sentences]
+3. **[Step Name]**: [Clear action description in 1-2 sentences]
+4. **[Step Name]**: [Clear action description in 1-2 sentences]
+5. **[Step Name]**: [Clear action description in 1-2 sentences]
+
+[Optional: Brief note on expected outcome or time estimate]
 ```
 
 **Example:**
 ```markdown
-## How to Reduce SaaS Churn
+## How to Optimize Content for Featured Snippets
 
-1. **Define your activation event** — Identify the specific action that signals a user has experienced core product value. For Slack, it's 2,000 messages sent. For Dropbox, it's saving the first file.
-2. **Instrument the activation funnel** — Add event tracking from signup to activation. Find the step where most users drop off — that's your highest-leverage point.
-3. **Build a customer health score** — Combine login frequency, feature adoption, and support ticket volume into a single score. Customers below 40 get proactive outreach.
-4. **Segment churn by cohort** — Not all churn looks the same. Compare churn rates by acquisition channel, onboarding path, and company size to find patterns.
-5. **Interview churned customers** — The customers who left quietly are more valuable than the ones who complained. Call 10 churned accounts per month and ask what they were trying to accomplish.
+Earning featured snippets requires strategic formatting and direct answers to search queries.
+
+1. **Identify snippet opportunities**: Use tools like Semrush or Ahrefs to find keywords where competitors have snippets you could capture.
+2. **Match the snippet format**: Analyze whether the current snippet is a paragraph, list, or table, and format your content accordingly.
+3. **Answer the question directly**: Provide a clear, concise answer (40-60 words for paragraph snippets) immediately after the question heading.
+4. **Add supporting context**: Expand on your answer with examples, data, and expert insights in the following paragraphs.
+5. **Use proper heading structure**: Place your target question as an H2 or H3, with the answer immediately following.
+
+Most featured snippets appear within 2-4 weeks of publishing well-optimized content.
 ```
 
-**Schema markup (JSON-LD):**
-```json
-{
-  "@context": "https://schema.org",
-  "@type": "HowTo",
-  "name": "How to [Task]",
-  "step": [
-    {"@type": "HowToStep", "name": "Step 1 name", "text": "Step 1 explanation"},
-    {"@type": "HowToStep", "name": "Step 2 name", "text": "Step 2 explanation"}
-  ]
-}
-```
+### Comparison Table Block
 
----
+Use for "[X] vs [Y]" queries. Optimal for table snippets.
 
-## Pattern 3: Comparison Table
-
-**Used for:** "X vs Y" and "best X for Y" queries.
-
-**Requirements:**
-- Header row with category names
-- First column: feature or criterion
-- Remaining columns: the things being compared
-- Keep it focused — 5-10 rows maximum
-- Don't try to cover everything; cover what matters most
-
-**Template:**
 ```markdown
-| Feature | [Option A] | [Option B] | [Option C] |
-|---|---|---|---|
-| [Criterion 1] | [Value] | [Value] | [Value] |
-| [Criterion 2] | [Value] | [Value] | [Value] |
-| [Criterion 3] | [Value] | [Value] | [Value] |
-| Best for | [Audience A] | [Audience B] | [Audience C] |
-| Pricing | [Range] | [Range] | [Range] |
+## [Option A] vs [Option B]: [Brief Descriptor]
+
+| Feature | [Option A] | [Option B] |
+|---------|------------|------------|
+| [Criteria 1] | [Value/Description] | [Value/Description] |
+| [Criteria 2] | [Value/Description] | [Value/Description] |
+| [Criteria 3] | [Value/Description] | [Value/Description] |
+| [Criteria 4] | [Value/Description] | [Value/Description] |
+| Best For | [Use case] | [Use case] |
+
+**Bottom line**: [1-2 sentence recommendation based on different needs]
 ```
 
-**Tips:**
-- Put the most important criteria first
-- Use simple values — "Yes / No / Partial" beats long prose in cells
-- Include a "Best for" row — AI systems use this for recommendation queries
-- Add a sentence below the table summarizing the verdict: "X is best for teams that need A; Y is better when B matters more."
+### Pros and Cons Block
 
----
+Use for evaluation queries: "Is [X] worth it?", "Should I [X]?"
 
-## Pattern 4: FAQ Block
+```markdown
+## Advantages and Disadvantages of [Topic]
 
-**Used for:** Question-style queries, People Also Ask queries, voice search.
+[1-sentence overview of the evaluation context]
 
-**Requirements:**
-- Question phrased exactly as someone would ask it (natural language)
-- Answer is complete in 2-4 sentences (no "read more in section 3")
-- 5-10 FAQs per block
-- Pair with FAQPage schema markup
+### Pros
 
-**Template:**
+- **[Benefit category]**: [Specific explanation]
+- **[Benefit category]**: [Specific explanation]
+- **[Benefit category]**: [Specific explanation]
+
+### Cons
+
+- **[Drawback category]**: [Specific explanation]
+- **[Drawback category]**: [Specific explanation]
+- **[Drawback category]**: [Specific explanation]
+
+**Verdict**: [1-2 sentence balanced conclusion with recommendation]
+```
+
+### FAQ Block
+
+Use for topic pages with multiple common questions. Essential for FAQ schema.
+
 ```markdown
 ## Frequently Asked Questions
 
-**What is [X]?**
-[2-4 sentence complete answer]
+### [Question phrased exactly as users search]?
 
-**How does [X] work?**
-[2-4 sentence complete answer]
+[Direct answer in first sentence]. [Supporting context in 2-3 additional sentences].
 
-**What's the difference between [X] and [Y]?**
-[2-4 sentence complete answer]
+### [Question phrased exactly as users search]?
 
-**How much does [X] cost?**
-[2-4 sentence complete answer]
+[Direct answer in first sentence]. [Supporting context in 2-3 additional sentences].
 
-**Is [X] right for [audience]?**
-[2-4 sentence complete answer]
+### [Question phrased exactly as users search]?
+
+[Direct answer in first sentence]. [Supporting context in 2-3 additional sentences].
 ```
 
-**Schema markup (JSON-LD):**
-```json
-{
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "What is [X]?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Complete answer text here"
-      }
-    }
-  ]
-}
-```
+**Tips for FAQ questions:**
+- Use natural question phrasing ("How do I..." not "How does one...")
+- Include question words: what, how, why, when, where, who, which
+- Match "People Also Ask" queries from search results
+- Keep answers between 50-100 words
 
-**Tips:**
-- Write questions the way users actually type or speak them — use Google's "People Also Ask" as a source
-- Answers should be complete without needing context from anywhere else on the page
-- Don't start answers with "Great question" or "That's a common question" — just answer
+### Listicle Block
+
+Use for "Best [X]", "Top [X]", "[Number] ways to [X]" queries.
+
+```markdown
+## [Number] Best [Items] for [Goal/Purpose]
+
+[1-2 sentence intro establishing context and selection criteria]
+
+### 1. [Item Name]
+
+[Why it's included in 2-3 sentences with specific benefits]
+
+### 2. [Item Name]
+
+[Why it's included in 2-3 sentences with specific benefits]
+
+### 3. [Item Name]
+
+[Why it's included in 2-3 sentences with specific benefits]
+```
 
 ---
 
-## Pattern 5: Statistic with Attribution
+## Generative Engine Optimization (GEO) Patterns
 
-**Used for:** Data queries, "how many" queries, research-backed claims.
+These patterns optimize content for citation by AI assistants like ChatGPT, Claude, Perplexity, and Gemini.
 
-**Requirements:**
-- Named source (not "a study" — the actual organization name)
-- Year of the data
-- Specific number (not "many" or "most")
-- Context (what the number means)
+### Statistic Citation Block
 
-**Template:**
+Statistics increase AI citation rates by 15-30%. Always include sources.
+
 ```markdown
-According to [Organization Name]'s [Report Name] ([Year]), [specific statistic with units]. [One sentence on what this means or why it matters].
+[Claim statement]. According to [Source/Organization], [specific statistic with number and timeframe]. [Context for why this matters].
 ```
 
 **Example:**
 ```markdown
-According to the Baymard Institute's 2024 UX benchmarking study, 69.8% of online shopping carts are abandoned before purchase. For a $1M/month ecommerce store, recovering just 5% of abandoned carts represents $35,000 in monthly revenue.
+Mobile optimization is no longer optional for SEO success. According to Google's 2024 Core Web Vitals report, 70% of web traffic now comes from mobile devices, and pages failing mobile usability standards see 24% higher bounce rates. This makes mobile-first indexing a critical ranking factor.
 ```
 
-**Tips:**
-- Link to the original source (AI systems and readers both benefit)
-- If data is from your own research, say so: "In our 2025 survey of 500 SaaS founders..."
-- Proprietary data is the highest-value citation target — AI systems actively seek original research
+### Expert Quote Block
 
----
+Named expert attribution adds credibility and increases citation likelihood.
 
-## Pattern 6: Expert Quote Block
-
-**Used for:** Authority building, "what do experts say" queries.
-
-**Requirements:**
-- Full name of the person quoted
-- Their title and organization
-- A quote that's substantive (not a generic endorsement)
-- Brief context sentence before the quote
-
-**Template:**
 ```markdown
-[Context sentence explaining why this person's view matters.]
-
-"[Direct quote — specific, substantive, something only they would say]," says [Full Name], [Title] at [Organization].
+"[Direct quote from expert]," says [Expert Name], [Title/Role] at [Organization]. [1 sentence of context or interpretation].
 ```
 
 **Example:**
 ```markdown
-Patrick Campbell, founder of ProfitWell (acquired by Paddle), studied pricing data from over 30,000 SaaS companies before reaching a counterintuitive conclusion about churn.
-
-"Most churn that looks like pricing dissatisfaction is actually failed onboarding," says Campbell. "The customer never saw the value that justified the price. That's a different problem than being too expensive."
+"The shift from keyword-driven search to intent-driven discovery represents the most significant change in SEO since mobile-first indexing," says Rand Fishkin, Co-founder of SparkToro. This perspective highlights why content strategies must evolve beyond traditional keyword optimization.
 ```
 
-**Tips:**
-- Don't use generic quotes ("innovation is key to success") — they add nothing
-- Quotes should contain a specific claim, data point, or perspective
-- If quoting your own team: "[Name], [Title] at [Company Name]" is still valid
-- Live quotes (from interviews or primary research) outperform secondary quotes from other articles
+### Authoritative Claim Block
 
----
+Structure claims for easy AI extraction with clear attribution.
 
-## Pattern 7: Quick-Scan Summary Box
-
-**Used for:** Queries where users want the TL;DR before committing to the full article.
-
-**Requirements:**
-- Placed near the top of the article (after the intro)
-- 3-7 key takeaways
-- Each bullet stands alone — no context required
-- Labeled clearly ("Key Takeaways" or "Quick Summary")
-
-**Template:**
 ```markdown
-**Key Takeaways**
-- [Specific, complete takeaway — could be read as a tweet]
-- [Specific, complete takeaway]
-- [Specific, complete takeaway]
-- [Specific, complete takeaway]
-- [Specific, complete takeaway]
+[Topic] [verb: is/has/requires/involves] [clear, specific claim]. [Source] [confirms/reports/found] that [supporting evidence]. This [explains/means/suggests] [implication or action].
 ```
 
-**Tips:**
-- This is often the block AI systems extract for "summary" type queries
-- Make each bullet specific: "Monthly churn below 2% is considered healthy for most SaaS" beats "Churn should be low"
-- Don't repeat the article intro verbatim — these should be the most actionable insights
+**Example:**
+```markdown
+E-E-A-T is the cornerstone of Google's content quality evaluation. Google's Search Quality Rater Guidelines confirm that trust is the most critical factor, stating that "untrustworthy pages have low E-E-A-T no matter how experienced, expert, or authoritative they may seem." This means content creators must prioritize transparency and accuracy above all other optimization tactics.
+```
+
+### Self-Contained Answer Block
+
+Create quotable, standalone statements that AI can extract directly.
+
+```markdown
+**[Topic/Question]**: [Complete, self-contained answer that makes sense without additional context. Include specific details, numbers, or examples in 2-3 sentences.]
+```
+
+**Example:**
+```markdown
+**Ideal blog post length for SEO**: The optimal length for SEO blog posts is 1,500-2,500 words for competitive topics. This range allows comprehensive topic coverage while maintaining reader engagement. HubSpot research shows long-form content earns 77% more backlinks than short articles, directly impacting search rankings.
+```
+
+### Evidence Sandwich Block
+
+Structure claims with evidence for maximum credibility.
+
+```markdown
+[Opening claim statement].
+
+Evidence supporting this includes:
+- [Data point 1 with source]
+- [Data point 2 with source]
+- [Data point 3 with source]
+
+[Concluding statement connecting evidence to actionable insight].
+```
 
 ---
 
-## Combining Patterns
+## Domain-Specific GEO Tactics
 
-The most citable pages combine multiple patterns throughout the piece:
+Different content domains benefit from different authority signals.
 
-**Recommended page structure for maximum AI extractability:**
-1. Definition block (first 300 words)
-2. Quick summary box (right after intro)
-3. Body sections with numbered steps or subsections
-4. Data points with full attribution throughout
-5. Comparison table (if competitive topic)
-6. FAQ block (before conclusion)
-7. Expert quote (to add authority)
+### Technology Content
+- Emphasize technical precision and correct terminology
+- Include version numbers and dates for software/tools
+- Reference official documentation
+- Add code examples where relevant
 
-A page with all 7 patterns has significantly more extractable surface area than a page with prose only. The AI has more options to pull from and a higher probability of finding something that perfectly matches the query.
+### Health/Medical Content
+- Cite peer-reviewed studies with publication details
+- Include expert credentials (MD, RN, etc.)
+- Note study limitations and context
+- Add "last reviewed" dates
+
+### Financial Content
+- Reference regulatory bodies (SEC, FTC, etc.)
+- Include specific numbers with timeframes
+- Note that information is educational, not advice
+- Cite recognized financial institutions
+
+### Legal Content
+- Cite specific laws, statutes, and regulations
+- Reference jurisdiction clearly
+- Include professional disclaimers
+- Note when professional consultation is advised
+
+### Business/Marketing Content
+- Include case studies with measurable results
+- Reference industry research and reports
+- Add percentage changes and timeframes
+- Quote recognized thought leaders
+
+---
+
+## Voice Search Optimization
+
+Voice queries are conversational and question-based. Optimize for these patterns:
+
+### Question Formats for Voice
+- "What is..."
+- "How do I..."
+- "Where can I find..."
+- "Why does..."
+- "When should I..."
+- "Who is..."
+
+### Voice-Optimized Answer Structure
+- Lead with direct answer (under 30 words ideal)
+- Use natural, conversational language
+- Avoid jargon unless targeting expert audience
+- Include local context where relevant
+- Structure for single spoken response
